@@ -31,10 +31,16 @@ async def on_ready():
 @bot.command()
 async def help(ctx):
     """Help command. Shows descriptions for all commands."""
-    helpEmbed = discord.Embed(title= 'Help Menu', description= '''*List of commands*:
+    helpEmbed = discord.Embed(title= 'Help Menu', description= '''
+*List of commands*:
 **ping** - Get my current ping
 **support** - DM support information
 **source** - get a link to my source code
+
+*DM only commands*
+**feedback** - Give anonymous feedback to the leaders of QS
+**set profile** - Next message sent by you will become your profile.
+**profile** [member ID] - get the profile of any member of QS dmed to you
 ''',colour=(discord.Colour.from_rgb(222, 0, 243)))
 
     await ctx.send(content=None, embed=helpEmbed)
