@@ -2,7 +2,6 @@
 
 import discord
 from discord.ext import commands
-import random
 import json
 
 # Get token from hidden json
@@ -20,6 +19,14 @@ description = '''Simple Bot for Quasar Systems. Made by KiwiAviation using disco
 
 # Create bot object
 bot = commands.Bot(command_prefix ='.', description=description, intents = intents, help_command=None)
+
+# Create list of cogs
+initial_extensions = ['cogs.basic_commands',]
+
+# Load cogs
+if __name__ == '__main__':
+    for extension in initial_extensions:
+        bot.load_extension(extension)
 
 @bot.event
 async def on_ready():
