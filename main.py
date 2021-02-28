@@ -39,4 +39,5 @@ async def help(ctx):
 
     await ctx.send(content=None, embed=helpEmbed)
 
+# Run the bot
 bot.run(token)
