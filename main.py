@@ -21,7 +21,10 @@ description = '''Simple Bot for Quasar Systems. Made by KiwiAviation using disco
 bot = commands.Bot(command_prefix ='.', description=description, intents = intents, help_command=None)
 
 # Create list of cogs
-initial_extensions = ['cogs.basic_commands',]
+initial_extensions = [
+    'cogs.basic_commands',
+    'cogs.qs_commands',
+]
 
 # Load cogs
 if __name__ == '__main__':
