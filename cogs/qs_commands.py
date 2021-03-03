@@ -9,13 +9,11 @@ class QSCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.react_message_id = 720375316064763965
-        self.target_channel1_id = 720375276583780414
-        self.target_channel2_id = 720680732556656660
-        self.emoji_role_pairs = {
-            '💼' : 728365952449904741
-        }
-        
+        self.react_message_id = 608312261668241428 # test: 720375316064763965
+        self.target_channel1_id = 644768028457697280 # test: 720375276583780414
+        self.target_channel2_id = 675346796515557420 # test: 720680732556656660
+        self.target_emoji = '💼'
+           
     @commands.Cog.listener()
     async def on_message(self, message):
         member = message.author
@@ -40,25 +38,30 @@ class QSCog(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         if payload.message_id == self.react_message_id:
-            try:
-                role_id = self.emoji_role_pairs[payload.emoji.name]
-            except KeyError as k:
-                print('KeyError', k)
+            # try:
+            #     role_id = self.emoji_role_pairs[payload.emoji.name]
+            # except KeyError as k:
+            #     print('KeyError', k)
+            #     return
+            if payload.emoji.name != self.target_emoji:
+                print('Wrong emoji')
                 return
             
             guild = self.bot.get_guild(payload.guild_id)
             if guild is None:
                 # Check if we're still in the guild and it's cached.
+                print('Guild not found')
                 return
 
-            role = guild.get_role(role_id)
-            if role is None:
-                # Make sure the role still exists and is valid.
-                return
+            # role = guild.get_role(role_id)
+            # if role is None:
+                # # Make sure the role still exists and is valid.
+                # return
             
             member = guild.get_member(payload.user_id)
             if member is None:
                 # Makes sure the member still exists and is valid
+                print('Member not found')
                 return
 
             # Ping in #recruit here
@@ -68,21 +71,21 @@ class QSCog(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload):
         if payload.message_id == self.react_message_id:
-            try:
-                role_id = self.emoji_role_pairs[payload.emoji.name]
-            except KeyError as k:
-                print('KeyError', k)
-                return
+            # try:
+                # role_id = self.emoji_role_pairs[payload.emoji.name]
+            # except KeyError as k:
+                # print('KeyError', k)
+                # return
             
             guild = self.bot.get_guild(payload.guild_id)
             if guild is None:
                 # Check if we're still in the guild and it's cached.
                 return
 
-            role = guild.get_role(role_id)
-            if role is None:
-                # Make sure the role still exists and is valid.
-                return
+            # role = guild.get_role(role_id)
+            # if role is None:
+            #     # Make sure the role still exists and is valid.
+            #     return
             
             member = guild.get_member(payload.user_id)
             if member is None:
