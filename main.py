@@ -47,7 +47,7 @@ async def help(ctx):
 **support** - DM support information
 **source** - get a link to my source code
 
-*DM only commands*
+**UNRELEASED** *DM only commands*
 **feedback** - Give anonymous feedback to the leaders of QS
 **set profile** - Next message sent by you will become your profile.
 **profile** [member ID] - get the profile of any member of QS dmed to you
