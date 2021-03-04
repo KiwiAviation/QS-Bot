@@ -18,7 +18,7 @@ intents.members = True
 description = '''Simple Bot for Quasar Systems. Made by KiwiAviation using discord.py'''
 
 # Create bot object
-bot = commands.Bot(command_prefix ='.', description=description, intents = intents, help_command=None)
+bot = commands.Bot(command_prefix ='.', description=description, intents = intents, help_command=None, activity=discord.Game(name='.help'))
 
 # Create list of cogs
 initial_extensions = [
