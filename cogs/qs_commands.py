@@ -22,10 +22,11 @@ class QSCog(commands.Cog):
             # Make sure message is not from bot
             if message.author != self.bot.user:
                 # Save message in designated channel
-                await self.bot.get_channel(self.target_channel2_id).send(f'Sent by **{message.author}**\n{message.content}')
+                await self.bot.get_channel(self.target_channel2_id).send(f'Sent by **{message.author}**, {message.author.id}\n{message.content}')
                 
                 # Send receipt
                 receipt = await self.bot.get_channel(self.target_channel1_id).send("Your message has been succesfully logged. Please wait for a manager to review your application! *All previous messages will delete in 60 seconds*")
+                await message.author.send("Your #recruit application has been succesfully saved. Please wait for a manager to review your application! *Your message in #recruit will be deleted to reduce clutter*")
 
                 # Check for purge, make sure messages are the one we want to delete
                 def should_del(m):
@@ -56,7 +57,7 @@ class QSCog(commands.Cog):
                 return
 
             # Ping in #recruit here
-            await guild.get_channel(self.target_channel1_id).send(f'Welcome to the company {member.mention}!\nPlease follow the above instructions to complete the joining process.')
+            await guild.get_channel(self.target_channel1_id).send(f'Thank you for expressing intrest in our faction {member.mention}!\nPlease follow the above instructions to complete the joining process.')
             
 
     @commands.Cog.listener()
