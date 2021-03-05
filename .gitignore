@@ -1,5 +1,5 @@
 *.png
 *.json
-*.pyc
 config.json
 todo.txt
+cogs/__pycache__
