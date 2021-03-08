@@ -9,9 +9,9 @@ class QSCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.react_message_id = 720375316064763965 #608312261668241428 # test: 720375316064763965
-        self.target_channel1_id = 720375276583780414 #644768028457697280 # test: 720375276583780414
-        self.target_channel2_id = 720680732556656660 #675346796515557420 # test: 720680732556656660
+        self.react_message_id = 608312261668241428 # test: 720375316064763965
+        self.target_channel1_id = 644768028457697280 # test: 720375276583780414
+        self.target_channel2_id = 675346796515557420 # test: 720680732556656660
         self.target_emoji = '💼'
            
     @commands.Cog.listener()
