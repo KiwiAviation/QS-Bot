@@ -9,9 +9,9 @@ class QSCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-        self.react_message_id = 608312261668241428 # test: 720375316064763965
-        self.target_channel1_id = 644768028457697280 # test: 720375276583780414
-        self.target_channel2_id = 675346796515557420 # test: 720680732556656660
+        self.react_message_id = 720375316064763965 #608312261668241428 # test: 720375316064763965
+        self.target_channel1_id = 720375276583780414 #644768028457697280 # test: 720375276583780414
+        self.target_channel2_id = 720680732556656660 #675346796515557420 # test: 720680732556656660
         self.target_emoji = '💼'
            
     @commands.Cog.listener()
@@ -26,7 +26,7 @@ class QSCog(commands.Cog):
                 
                 # Send receipt
                 receipt = await self.bot.get_channel(self.target_channel1_id).send("Your message has been succesfully logged. Please wait for a manager to review your application! *All previous messages will delete in 60 seconds*")
-                await message.author.send("Your #recruit application has been succesfully saved. Please wait for a manager to review your application! *Your message in #recruit will be deleted to reduce clutter*")
+                await message.author.send(f"Your {self.bot.get_channel(644768028457697280).mention} application has been succesfully saved. Please wait for a manager to review your application! *Your message in #recruit will be deleted to reduce clutter*")
 
                 # Check for purge, make sure messages are the one we want to delete
                 def should_del(m):
@@ -57,7 +57,7 @@ class QSCog(commands.Cog):
                 return
 
             # Ping in #recruit here
-            await guild.get_channel(self.target_channel1_id).send(f'Thank you for expressing intrest in our faction {member.mention}!\nPlease follow the above instructions to complete the joining process.')
+            self.ping_message = await guild.get_channel(self.target_channel1_id).send(f'Thank you for expressing intrest in our faction {member.mention}!\nPlease follow the above instructions to complete the joining process.')
             
 
     @commands.Cog.listener()
@@ -75,6 +75,8 @@ class QSCog(commands.Cog):
                 return
 
             # Delete @ message
+            if self.ping_message:
+                await self.ping_message.delete()
 
      
 def setup(bot):
