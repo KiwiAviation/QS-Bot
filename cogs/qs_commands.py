@@ -58,7 +58,7 @@ class QSCog(commands.Cog):
                 return
 
             # Ping in #recruit here
-            self.ping_message = await guild.get_channel(self.target_channel1_id).send(f'Thank you for expressing intrest in our faction {member.mention}!\nPlease follow the above instructions to complete the joining process.')
+            self.ping_message = await guild.get_channel(self.target_channel1_id).send(f'Thank you for expressing interest in our faction {member.mention}!\nPlease follow the above instructions to complete the joining process.')
             
 
     @commands.Cog.listener()
