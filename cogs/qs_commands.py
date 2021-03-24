@@ -45,19 +45,16 @@ class QSCog(commands.Cog):
         if payload.message_id == self.react_message_id:
 
             if payload.emoji.name != self.target_emoji:
-                print('Wrong emoji')
                 return
             
             guild = self.bot.get_guild(payload.guild_id)
             if guild is None:
                 # Check if we're still in the guild and it's cached.
-                print('Guild not found')
                 return
             
             member = guild.get_member(payload.user_id)
             if member is None:
                 # Makes sure the member still exists and is valid
-                print('Member not found')
                 return
 
             # Ping in #recruit here

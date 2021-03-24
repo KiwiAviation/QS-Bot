@@ -7,6 +7,13 @@ class BasicCommandsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author == self.bot.user:
+            return
+        if message.content == "yo":
+            await message.channel.send("yo")
+
     @commands.command()
     async def ping(self, ctx):
         await ctx.send(f'My ping is: **{self.bot.latency:.4f}ms**')
