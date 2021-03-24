@@ -94,7 +94,7 @@ class QSCog(commands.Cog):
             except asyncio.TimeoutError:
                 await ctx.send("Timed out. If you still wish to give feedback, resend the feedback command")
             else:
-                if msg.content == "cancel" or msg.content == "'cancel'":
+                if msg.content.lower() == "cancel" or msg.content.lower() == "'cancel'":
                     await ctx.send("Feedback succesfully canceled")
                 else:
                     await self.bot.get_channel(self.feedback_channel_id).send(f"**Anonymous Feedback**\n{msg.content}")
