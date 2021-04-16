@@ -10,15 +10,15 @@ class QSCog(commands.Cog):
         self.bot = bot
 
         # recruit msg ids
-        self.react_message_id = 720375316064763965 # test: 720375316064763965, real: 608312261668241428
-        self.recruit_channel_id = 720375276583780414 # test: 720375276583780414, real: 644768028457697280
-        self.saved_channel_id = 720680732556656660 # test: 720680732556656660, real: 675346796515557420
+        self.react_message_id = 608312261668241428 # test: 720375316064763965, real: 608312261668241428
+        self.recruit_channel_id = 644768028457697280 # test: 720375276583780414, real: 644768028457697280
+        self.saved_channel_id = 675346796515557420 # test: 720680732556656660, real: 675346796515557420
         
         # acceptence msg ids
-        self.employeeChat_channel_id = 832725613503709224 # test: 832725613503709224, real: 608038955421794305
-        self.employeeRoles_channel_id = 720130817120010243 # test: 720130817120010243 real:654158920746663948
-        self.newPlayerInfo_channel_id = 727620147514441849 # test: 727620147514441849 real: 826186463568724009
-        self.ourCompany_channel_id = 818890198690562088 # test: 818890198690562088 real: 826186463568724009
+        self.employeeChat_channel_id = 608038955421794305 # test: 832725613503709224, real: 608038955421794305
+        self.employeeRoles_channel_id = 654158920746663948 # test: 720130817120010243 real: 654158920746663948
+        self.newPlayerInfo_channel_id = 732340588434948126 # test: 727620147514441849 real: 732340588434948126
+        self.ourCompany_channel_id = 666104050051448853 # test: 818890198690562088 real: 666104050051448853
         
         # emojis
         self.recruit_target_emoji = '\U0001f4bc' # :briefcase:
