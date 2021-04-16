@@ -2,4 +2,5 @@
 *.json
 config.json
 todo.txt
-**/__pycache__/**
+.vscode/
+cogs/__pycache__/
