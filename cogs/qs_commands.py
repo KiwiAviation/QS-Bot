@@ -15,7 +15,10 @@ class QSCog(commands.Cog):
         self.saved_channel_id = 720680732556656660 # test: 720680732556656660, real: 675346796515557420
         
         # acceptence msg ids
-        self.employee_channel_id = 832725613503709224 # test: 832725613503709224, real: 608038955421794305
+        self.employeeChat_channel_id = 832725613503709224 # test: 832725613503709224, real: 608038955421794305
+        self.employeeRoles_channel_id = 720130817120010243 # test: 720130817120010243 real:654158920746663948
+        self.newPlayerInfo_channel_id = 727620147514441849 # test: 727620147514441849 real: 826186463568724009
+        self.ourCompany_channel_id = 818890198690562088 # test: 818890198690562088 real: 826186463568724009
         
         # emojis
         self.recruit_target_emoji = '\U0001f4bc' # :briefcase:
@@ -32,9 +35,10 @@ class QSCog(commands.Cog):
             # Make sure message is not from bot
             if message.author != self.bot.user:
                 # Save message in designated channel
-                self.saved_msg = await self.bot.get_channel(self.saved_channel_id).send(
-                    f"Sent by **{message.author}**, {message.author.id}\n{message.content}")
-                await self.saved_msg.add_reaction(self.saved_target_emoji)
+                self.saved_msg_user = (await self.bot.get_channel(self.saved_channel_id).send(
+                    f"Sent by **{message.author}**, {message.author.id}\n{message.content}"), 
+                    message.author)
+                await self.saved_msg_user[0].add_reaction(self.saved_target_emoji)
                 
                 # Send receipt
                 receipt = await self.bot.get_channel(self.recruit_channel_id).send(
@@ -78,7 +82,7 @@ class QSCog(commands.Cog):
                 f"Thank you for expressing interest in our faction {member.mention}!\nPlease follow the "
                 "above instructions to complete the joining process.")
 
-        elif payload.message_id == self.saved_msg.id: # Message in #saved-recruit
+        elif payload.message_id == self.saved_msg_user[0].id: # Message in #saved-recruit
             
             if payload.emoji.name != self.saved_target_emoji:
                 return
@@ -96,7 +100,12 @@ class QSCog(commands.Cog):
                 # Makes sure message is not from QSBot
                 return
 
-            #await guild.get_channel(self.employee_channel_id).send(f'Your recruit application has been accepted! Welcome to the company {}! Choose division roles in {}, and learn more about the game and our company in {} and {}!')
+            await guild.get_channel(self.employeeChat_channel_id).send(
+                f"Your recruit application has been accepted! Welcome to the company "
+                f"{self.saved_msg_user[1].mention}! Choose division roles in "
+                f"{self.bot.get_channel(self.employeeRoles_channel_id).mention}, and learn more about the "
+                f"game and our company in {self.bot.get_channel(self.newPlayerInfo_channel_id).mention} and "
+                f"{self.bot.get_channel(self.ourCompany_channel_id).mention}!")
             
 
     @commands.Cog.listener()
@@ -115,7 +124,10 @@ class QSCog(commands.Cog):
 
             # Delete @ message
             if self.ping_message:
-                await self.ping_message.delete()
+                try:
+                    await self.ping_message.delete()
+                except discord.errors.NotFound:
+                    pass
 
     @commands.command()
     async def feedback(self, ctx):
