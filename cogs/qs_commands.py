@@ -28,6 +28,10 @@ class QSCog(commands.Cog):
         # feedback channel ids
         self.feedback_channel_id = 818892761474138112 # test: 818890198690562088, real: 818892761474138112
            
+        # Other objects
+        self.saved_msg_user = (0,0)
+        self.ping_message = None
+
     @commands.Cog.listener()
     async def on_message(self, message):
         member = message.author
@@ -127,7 +131,7 @@ class QSCog(commands.Cog):
                 return
 
             # Delete @ message
-            if self.ping_message:
+            if self.ping_message != None:
                 try:
                     await self.ping_message.delete()
                 except discord.errors.NotFound:
