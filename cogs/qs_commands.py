@@ -19,7 +19,8 @@ class QSCog(commands.Cog):
         self.employeeRoles_channel_id = 654158920746663948 # test: 720130817120010243 real: 654158920746663948
         self.newPlayerInfo_channel_id = 732340588434948126 # test: 727620147514441849 real: 732340588434948126
         self.ourCompany_channel_id = 666104050051448853 # test: 818890198690562088 real: 666104050051448853
-        
+        self.leader_role_id = 599247628408193043 # test: 833012981532983336 real: 599247628408193043
+
         # emojis
         self.recruit_target_emoji = '\U0001f4bc' # :briefcase:
         self.saved_target_emoji = '\U00002705' # :white_check_mark:
@@ -47,7 +48,7 @@ class QSCog(commands.Cog):
                 
                 # DM message saved conformation
                 await message.author.send(
-                    f"Your {self.bot.get_channel(644768028457697280).mention} application has been "
+                    f"Your {self.bot.get_channel(self.recruit_channel_id).mention} application has been "
                     "succesfully saved. Please wait for a manager to review your application! *Your "
                     "message in #recruit will be deleted to reduce clutter*")
 
@@ -98,6 +99,9 @@ class QSCog(commands.Cog):
                 return
             elif member.id == self.bot.user.id:
                 # Makes sure message is not from QSBot
+                return
+            elif member.top_role.id != self.leader_role_id:
+                # Makes sure user has top role
                 return
 
             await guild.get_channel(self.employeeChat_channel_id).send(
