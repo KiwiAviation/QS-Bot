@@ -9,6 +9,9 @@ class QSCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+        # guild id
+        self.server_id = 599242121857204224 # test: 720130817120010240 real: 599242121857204224
+        
         # recruit msg ids
         self.react_message_id = 608312261668241428 # test: 720375316064763965, real: 608312261668241428
         self.recruit_channel_id = 644768028457697280 # test: 720375276583780414, real: 644768028457697280
@@ -19,7 +22,12 @@ class QSCog(commands.Cog):
         self.employeeRoles_channel_id = 654158920746663948 # test: 720130817120010243 real: 654158920746663948
         self.newPlayerInfo_channel_id = 732340588434948126 # test: 727620147514441849 real: 732340588434948126
         self.ourCompany_channel_id = 666104050051448853 # test: 818890198690562088 real: 666104050051448853
+        
+        # role ids
         self.leader_role_id = 599247628408193043 # test: 833012981532983336 real: 599247628408193043
+        self.recruit_role_id = 605596516677320724 
+        self.employee_role_id = 644766752907198464
+        self.novice_role_id = 724045356635258920
 
         # emojis
         self.recruit_target_emoji = '\U0001f4bc' # :briefcase:
@@ -29,7 +37,7 @@ class QSCog(commands.Cog):
         self.feedback_channel_id = 818892761474138112 # test: 818890198690562088, real: 818892761474138112
            
         # Other objects
-        self.saved_msg_user = (0,0)
+        self.saved_msg_user = (0,0) # [0] is message object, [1] is applicant object
         self.ping_message = None
 
     @commands.Cog.listener()
@@ -108,12 +116,24 @@ class QSCog(commands.Cog):
                 # Makes sure user has top role
                 return
 
+            # send acceptence message
             await guild.get_channel(self.employeeChat_channel_id).send(
                 f"Your recruit application has been accepted! Welcome to the company "
                 f"{self.saved_msg_user[1].mention}! Choose division roles in "
                 f"{self.bot.get_channel(self.employeeRoles_channel_id).mention}, and learn more about the "
                 f"game and our company in {self.bot.get_channel(self.newPlayerInfo_channel_id).mention} and "
                 f"{self.bot.get_channel(self.ourCompany_channel_id).mention}!")
+            
+            # remove recruit role
+            async self.saved_msg_user[1].remove_roles(
+                self.bot.get_guild(self.server_id).get_role(self.recruit_role_id)
+            )
+
+            # add employee and novice role
+            async self.saved_msg_user[1].add_roles(
+                self.bot.get_guild(self.server_id).get_role(self.employee_role_id),
+                self.bot.get_guild(self.server_id).get_role(self.novice_role_id)
+            )
             
 
     @commands.Cog.listener()
