@@ -125,12 +125,12 @@ class QSCog(commands.Cog):
                 f"{self.bot.get_channel(self.ourCompany_channel_id).mention}!")
             
             # remove recruit role
-            async self.saved_msg_user[1].remove_roles(
+            await self.saved_msg_user[1].remove_roles(
                 self.bot.get_guild(self.server_id).get_role(self.recruit_role_id)
             )
 
             # add employee and novice role
-            async self.saved_msg_user[1].add_roles(
+            await self.saved_msg_user[1].add_roles(
                 self.bot.get_guild(self.server_id).get_role(self.employee_role_id),
                 self.bot.get_guild(self.server_id).get_role(self.novice_role_id)
             )
