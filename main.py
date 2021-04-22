@@ -49,8 +49,6 @@ async def help(ctx):
 
 *DM only commands*
 **feedback** - Give anonymous feedback to the leaders of QS
-**UNRELEASED** **set profile** - Next message sent by you will become your profile.
-**UNRELEASED** **profile** [member ID] - get the profile of any member of QS DMed to you
 ''',colour=(discord.Colour.from_rgb(222, 0, 243)))
 
     await ctx.send(content=None, embed=helpEmbed)
