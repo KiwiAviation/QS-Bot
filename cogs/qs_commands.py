@@ -31,14 +31,17 @@ class QSCog(commands.Cog):
 
         # emojis
         self.recruit_target_emoji = '\U0001f4bc' # :briefcase:
-        self.saved_target_emoji = '\U00002705' # :white_check_mark:
+        self.saved_target_emoji_1 = '\U00002705' # :white_check_mark:
+        self.saved_target_emoji_2 = '\U0001f6ab' # :no_entry_sign:
 
         # feedback channel ids
         self.feedback_channel_id = 818892761474138112 # test: 818890198690562088, real: 818892761474138112
            
         # Other objects
-        self.saved_msg_user = (0,0) # [0] is message object, [1] is applicant object
+        #self.saved_msg_user = (0,0) # [0] is message object, [1] is applicant object
         self.ping_message = None
+
+        self.recruit_msgs = {} # saved recruit msg id, user object (of recruit)
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -47,12 +50,20 @@ class QSCog(commands.Cog):
         if message.channel == self.bot.get_channel(self.recruit_channel_id):
             # Make sure message is not from bot
             if message.author != self.bot.user:
-                # Save message in designated channel
-                self.saved_msg_user = (await self.bot.get_channel(self.saved_channel_id).send(
-                    f"Sent by **{message.author}**, {message.author.id}\n{message.content}"), 
-                    message.author)
-                await self.saved_msg_user[0].add_reaction(self.saved_target_emoji)
-                
+                # Send message in designated save channel
+                self.saved_recruit_message = await self.bot.get_channel(self.saved_channel_id).send(
+                    f"Sent by **{message.author}**, {message.author.id}\n{message.content}")
+
+                # Append to dict
+                self.recruit_msgs[self.saved_recruit_message.id] = message.author
+
+                # TEST
+                print(self.recruit_msgs)
+
+                # Add reactions for accepting or denying
+                await self.saved_recruit_message.add_reaction(self.saved_target_emoji_1)
+                await self.saved_recruit_message.add_reaction(self.saved_target_emoji_2)
+
                 # Send receipt
                 receipt = await self.bot.get_channel(self.recruit_channel_id).send(
                     "Your message has been succesfully logged. Please wait for a manager to review your "
@@ -95,9 +106,10 @@ class QSCog(commands.Cog):
                 f"Thank you for expressing interest in our faction {member.mention}!\nPlease follow the "
                 "above instructions to complete the joining process.")
 
-        elif payload.message_id == self.saved_msg_user[0].id: # Message in #saved-recruit
+        elif payload.message_id in self.recruit_msgs: # Checks that reaction is from a valid message in #saved-recruit
             
-            if payload.emoji.name != self.saved_target_emoji:
+            if payload.emoji.name != self.saved_target_emoji_1 and payload.emoji.name != self.saved_target_emoji_2:
+                # ensures reaction is meant to acccept or deny
                 return
             
             guild = self.bot.get_guild(payload.guild_id)
@@ -110,30 +122,45 @@ class QSCog(commands.Cog):
                 # Makes sure the member still exists and is valid
                 return
             elif member.id == self.bot.user.id:
-                # Makes sure message is not from QSBot
+                # Makes sure reaction is not from QSBot
                 return
             elif member.top_role.id != self.leader_role_id:
                 # Makes sure user has top role
                 return
 
-            # send acceptence message
-            await guild.get_channel(self.employeeChat_channel_id).send(
-                f"Your recruit application has been accepted! Welcome to the company "
-                f"{self.saved_msg_user[1].mention}! Choose division roles in "
-                f"{self.bot.get_channel(self.employeeRoles_channel_id).mention}, and learn more about the "
-                f"game and our company in {self.bot.get_channel(self.newPlayerInfo_channel_id).mention} and "
-                f"{self.bot.get_channel(self.ourCompany_channel_id).mention}!")
-            
-            # remove recruit role
-            await self.saved_msg_user[1].remove_roles(
-                self.bot.get_guild(self.server_id).get_role(self.recruit_role_id)
-            )
+            if payload.emoji.name == self.saved_target_emoji_1: # User was accepted
+                # send acceptence message
+                await guild.get_channel(self.employeeChat_channel_id).send(
+                    f"Your recruit application has been accepted! Welcome to the company "
+                    f"{self.recruit_msgs[payload.message_id].mention}! Choose division roles in "
+                    f"{self.bot.get_channel(self.employeeRoles_channel_id).mention}, and learn more about the "
+                    f"game and our company in {self.bot.get_channel(self.newPlayerInfo_channel_id).mention} and "
+                    f"{self.bot.get_channel(self.ourCompany_channel_id).mention}!")
+                
+                # remove recruit role
+                await self.recruit_msgs[payload.message_id].remove_roles(
+                    self.bot.get_guild(self.server_id).get_role(self.recruit_role_id)
+                )
 
-            # add employee and novice role
-            await self.saved_msg_user[1].add_roles(
-                self.bot.get_guild(self.server_id).get_role(self.employee_role_id),
-                self.bot.get_guild(self.server_id).get_role(self.novice_role_id)
-            )
+                # add employee and novice role
+                await self.recruit_msgs[payload.message_id].add_roles(
+                    self.bot.get_guild(self.server_id).get_role(self.employee_role_id),
+                    self.bot.get_guild(self.server_id).get_role(self.novice_role_id)
+                )
+
+            elif payload.emoji.name == self.saved_target_emoji_2: # User was denied
+                # send denial dm
+                await self.recruit_msgs[payload.message_id].send(
+                    f"Hello {self.recruit_msgs[payload.message_id].mention}\n"
+                    "Unfortunately, we have had to deny your request to join Quasar Systems. "
+                    "To find out why your request was denied, or to request an appeal, contact "
+                    "Quasar System's leader, Combustible"
+                )
+
+                # remove recruit role
+                await self.recruit_msgs[payload.message_id].remove_roles(
+                    self.bot.get_guild(self.server_id).get_role(self.recruit_role_id)
+                )
             
 
     @commands.Cog.listener()
